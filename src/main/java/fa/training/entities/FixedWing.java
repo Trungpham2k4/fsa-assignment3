@@ -3,8 +3,8 @@ package fa.training.entities;
 import fa.training.enums.PlaneType;
 
 public class FixedWing extends Airplane{
-    PlaneType planeType;
-    double minNeededRunwaySize;
+    private PlaneType planeType;
+    private double minNeededRunwaySize;
 
     public FixedWing(String id, String model, double cruiseSpeed, double emptyWeight, double maxTakeoffWeight, PlaneType planeType, double minNeededRunwaySize) {
         super(id,model,cruiseSpeed,emptyWeight,maxTakeoffWeight);

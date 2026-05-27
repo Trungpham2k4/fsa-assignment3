@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Airport {
-    String id;
-    String name;
-    double runwaySize;
-    int maxFixedWingParkingPlace;
-    int maxRotatedWingParkingPlace;
-    List<String> fixedWingIds;
-    List<String> helicopterIds;
+    private String id;
+    private String name;
+    private double runwaySize;
+    private int maxFixedWingParkingPlace;
+    private int maxRotatedWingParkingPlace;
+    private List<String> fixedWingIds;
+    private List<String> helicopterIds;
 
     public String getId() {
         return id;

@@ -1,11 +1,11 @@
 package fa.training.entities;
 
 public abstract class Airplane {
-    String id;
-    String model;
-    double cruiseSpeed;
-    double emptyWeight;
-    double maxTakeoffWeight;
+    protected String id;
+    protected String model;
+    protected double cruiseSpeed;
+    protected double emptyWeight;
+    protected double maxTakeoffWeight;
 
     public Airplane(String id, String model, double cruiseSpeed, double emptyWeight, double maxTakeoffWeight) {
         this.id = id;
