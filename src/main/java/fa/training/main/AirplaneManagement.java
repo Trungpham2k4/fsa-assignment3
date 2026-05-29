@@ -154,16 +154,24 @@ public class AirplaneManagement {
             for(Airport airport : airports){
                 airportWriter.write(airport.toString());
                 airportWriter.newLine();
-            }
-            List<FixedWing> fixedWings = fixedwingService.findAll();
-            for(FixedWing fixedWing : fixedWings){
-                fixedWingsWriter.write(fixedWing.toString());
-                fixedWingsWriter.newLine();
-            }
-            List<Helicopter> helicopters = helicopterService.findAll();
-            for(Helicopter helicopter : helicopters){
-                helicopterWriter.write(helicopter.toString());
-                helicopterWriter.newLine();
+                for(String fixedWingId : airport.getFixedWingIds()){
+                    FixedWing fixedWing = fixedwingService.findById(fixedWingId);
+                    if(fixedWing != null){
+                        fixedWingsWriter.write(fixedWing.toString());
+                        fixedWingsWriter.write(",");
+                        fixedWingsWriter.write(airport.getId());
+                        fixedWingsWriter.newLine();
+                    }
+                }
+                for(String helicopterId : airport.getHelicopterIds()){
+                    Helicopter helicopter = helicopterService.findById(helicopterId);
+                    if(helicopter != null){
+                        helicopterWriter.write(helicopter.toString());
+                        helicopterWriter.write(",");
+                        helicopterWriter.write(airport.getId());
+                        helicopterWriter.newLine();
+                    }
+                }
             }
         }catch (IOException e){
             System.out.println("Error store data because of: " + e.getMessage());
@@ -224,7 +232,19 @@ public class AirplaneManagement {
         System.out.println("Remove an airport");
         delimiter();
         String airportId = inputValidId("Enter ID (start with AP), then 5 numbers: ","AP");
-        airportService.remove(airportId);
+        Airport airport = airportService.findById(airportId);
+        if(airport != null){
+            List<String> fixedWingIds = airport.getFixedWingIds();
+            for(String fixedWingId : fixedWingIds){
+                fixedwingService.delete(fixedWingId);
+            }
+            List<String> helicopterIds = airport.getHelicopterIds();
+            for(String helicopterId : helicopterIds){
+                helicopterService.delete(helicopterId);
+            }
+            airportService.remove(airportId);
+        }
+
     }
     private static void updateAirport(){
         delimiter();
@@ -269,19 +289,13 @@ public class AirplaneManagement {
         delimiter();
         System.out.println("Display list of all fixed wings in airport");
         delimiter();
-        String airportId = inputValidId("Enter ID of airport that you want to show fixed wings: ","AP");
-        if(!Validator.isExistId(airportId, airportService.findAllId())){
-            System.out.println("Airport not found");
-            return;
-        }
-        Airport airport = airportService.findById(airportId);
-        System.out.println("Airport ID: " + airportId);
-        System.out.println("Airport Name: " + airport.getName());
-        System.out.println("List of fixed wings");
-        List<String> fixedWings = fixedwingService.findAllIds();
-        for(String fixedWingId : fixedWings){
-            if(airport.getFixedWingIds().contains(fixedWingId)){
-                System.out.println(fixedwingService.findById(fixedWingId));
+        List<FixedWing> fixedWings = fixedwingService.findAll();
+        for(FixedWing fixedWing : fixedWings){
+            System.out.print("Airplane: " + fixedWing + " ");
+            for(Airport airport : airportService.findAll()){
+                if(airport.getFixedWingIds().contains(fixedWing.getId())){
+                    System.out.println("Parked in airport: " + airport.getId() + "-" + airport.getName());
+                }
             }
         }
     }
@@ -290,19 +304,13 @@ public class AirplaneManagement {
         delimiter();
         System.out.println("Display list of all helicopters in airport");
         delimiter();
-        String airportId = inputValidId("Enter ID of airport that you want to show helicopters: ","AP");
-        if(!Validator.isExistId(airportId, airportService.findAllId())){
-            System.out.println("Airport not found");
-            return;
-        }
-        Airport airport = airportService.findById(airportId);
-        System.out.println("Airport ID: " + airportId);
-        System.out.println("Airport Name: " + airport.getName());
-        System.out.println("List of helicopters");
-        List<String> helicopters = helicopterService.findAllIds();
-        for(String helicopterId : helicopters){
-            if(airport.getHelicopterIds().contains(helicopterId)){
-                System.out.println(helicopterService.findById(helicopterId));
+        List<Helicopter> helicopters = helicopterService.findAll();
+        for(Helicopter helicopter : helicopters){
+            System.out.print("Airplane: " + helicopter + " ");
+            for(Airport airport : airportService.findAll()){
+                if(airport.getHelicopterIds().contains(helicopter.getId())){
+                    System.out.println("Parked in airport: " + airport.getId() + "-" + airport.getName());
+                }
             }
         }
     }
