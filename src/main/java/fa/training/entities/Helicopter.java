@@ -19,14 +19,8 @@ public class Helicopter extends Airplane{
 
     @Override
     public String toString() {
-        return "Helicopter{" +
-                "id='" + id + '\'' +
-                ", model='" + model + '\'' +
-                ", cruiseSpeed=" + cruiseSpeed +
-                ", emptyWeight=" + emptyWeight +
-                ", maxTakeoffWeight=" + maxTakeoffWeight +
-                ", range=" + range +
-                ", flyMethod='" + flyMethod() + '\'' +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString()).append(",").append(range);
+        return sb.toString();
     }
 }

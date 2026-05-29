@@ -1,5 +1,6 @@
 package fa.training.services;
 
+import fa.training.entities.Airport;
 import fa.training.entities.FixedWing;
 import fa.training.enums.PlaneType;
 
@@ -41,4 +42,23 @@ public class FixedwingService {
         return fixedWings.stream().anyMatch(fixedWing -> fixedWing.getId().equals(fixedWingId));
     }
 
+    public void parse(String line, AirportService airportService) {
+        String[] parts = line.split(",");
+        if(parts.length == 8) {
+            Airport airport = airportService.findById(parts[7]);
+            if(airport != null) {
+                FixedWing fixedWing = new FixedWing(
+                        parts[0],
+                        parts[1],
+                        Double.parseDouble(parts[2]),
+                        Double.parseDouble(parts[3]),
+                        Double.parseDouble(parts[4]),
+                        PlaneType.valueOf(parts[5]),
+                        Double.parseDouble(parts[6])
+                );
+                airport.getFixedWingIds().add(fixedWing.getId());
+                fixedWings.add(fixedWing);
+            }
+        }
+    }
 }

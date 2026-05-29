@@ -1,5 +1,6 @@
 package fa.training.services;
 
+import fa.training.entities.Airport;
 import fa.training.entities.Helicopter;
 
 import java.util.ArrayList;
@@ -39,5 +40,23 @@ public class HelicopterService {
     }
     public boolean isExists(String fixedWingId) {
         return helicopters.stream().anyMatch(helicopter -> helicopter.getId().equals(fixedWingId));
+    }
+
+    public void parse(String line, AirportService airportService) {
+        String[] parts = line.split(",");
+        if(parts.length == 7) {
+            Airport airport = airportService.findById(parts[6]);
+            if(airport != null) {
+                Helicopter helicopter = new Helicopter(
+                        parts[0],
+                        parts[1],
+                        Double.parseDouble(parts[2]),
+                        Double.parseDouble(parts[3]),
+                        Double.parseDouble(parts[4]),
+                        Double.parseDouble(parts[5]));
+                airport.getHelicopterIds().add(helicopter.getId());
+                helicopters.add(helicopter);
+            }
+        }
     }
 }

@@ -33,6 +33,10 @@ public class Airport {
     }
 
     public void setMaxFixedWingParkingPlace(int maxFixedWingParkingPlace) {
+        if(fixedWingIds == null){
+            this.maxFixedWingParkingPlace = maxFixedWingParkingPlace;
+            return;
+        }
         this.maxFixedWingParkingPlace = Math.max(fixedWingIds.size(), maxFixedWingParkingPlace);
     }
 
@@ -49,6 +53,10 @@ public class Airport {
     }
 
     public void setMaxRotatedWingParkingPlace(int maxRotatedWingParkingPlace) {
+        if(helicopterIds == null){
+            this.maxRotatedWingParkingPlace = maxRotatedWingParkingPlace;
+            return;
+        }
         this.maxRotatedWingParkingPlace = Math.max(helicopterIds.size(), maxRotatedWingParkingPlace);
     }
 
@@ -80,12 +88,12 @@ public class Airport {
 
     @Override
     public String toString() {
-        return "Airport{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", runwaySize=" + runwaySize +
-                ", maxFixedWingParkingPlace=" + maxFixedWingParkingPlace +
-                ", maxRotatedWingParkingPlace=" + maxRotatedWingParkingPlace +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append(id).append(",")
+                .append(name).append(",")
+                .append(runwaySize).append(",")
+                .append(maxFixedWingParkingPlace).append(",")
+                .append(maxRotatedWingParkingPlace);
+        return sb.toString();
     }
 }

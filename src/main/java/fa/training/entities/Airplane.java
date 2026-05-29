@@ -56,4 +56,15 @@ public abstract class Airplane {
     }
 
     public abstract String flyMethod();
+
+    @Override
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(id).append(",")
+                .append(model).append(",")
+                .append(cruiseSpeed).append(",")
+                .append(emptyWeight).append(",")
+                .append(maxTakeoffWeight);
+        return stringBuilder.toString();
+    }
 }

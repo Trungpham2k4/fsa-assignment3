@@ -45,4 +45,18 @@ public class AirportService {
     public boolean isExists(String fixedWingId) {
         return airports.stream().anyMatch(airport -> airport.getId().equals(fixedWingId));
     }
+
+    public void parse(String airportString){
+        String[] airportAttr = airportString.split(",");
+        if(airportAttr.length == 5){
+            Airport airport = new Airport(
+                    airportAttr[0],
+                    airportAttr[1],
+                    Double.parseDouble(airportAttr[2]),
+                    Integer.parseInt(airportAttr[3]),
+                    Integer.parseInt(airportAttr[4])
+            );
+            airports.add(airport);
+        }
+    }
 }

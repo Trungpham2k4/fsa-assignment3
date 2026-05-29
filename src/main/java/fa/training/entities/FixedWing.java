@@ -27,15 +27,10 @@ public class FixedWing extends Airplane{
 
     @Override
     public String toString() {
-        return "FixedWing{" +
-                "id='" + id + '\'' +
-                ", model='" + model + '\'' +
-                ", cruiseSpeed=" + cruiseSpeed +
-                ", emptyWeight=" + emptyWeight +
-                ", maxTakeoffWeight=" + maxTakeoffWeight +
-                ", planeType=" + planeType +
-                ", minNeededRunwaySize=" + minNeededRunwaySize +
-                ", flyMethod='" + flyMethod() + '\'' +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString()).append(",")
+                .append(planeType).append(",")
+                .append(minNeededRunwaySize);
+        return sb.toString();
     }
 }

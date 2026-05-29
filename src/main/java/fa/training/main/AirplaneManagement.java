@@ -12,6 +12,7 @@ import fa.training.utils.Validator;
 import java.io.*;
 import java.util.List;
 import java.util.Scanner;
+import static fa.training.utils.Constants.*;
 
 public class AirplaneManagement {
 
@@ -19,10 +20,6 @@ public class AirplaneManagement {
     private static final FixedwingService fixedwingService = new FixedwingService();
     private static final HelicopterService helicopterService = new HelicopterService();
     private static final Scanner scanner = new Scanner(System.in);
-    private static final String OUTPUT_DATA_PATH = "data/output/";
-    private static final String AIRPORT_FILE_NAME = "airports.txt";
-    private static final String FIXEDWING_FILE_NAME = "fixedwings.txt";
-    private static final String HELICOPTER_FILE_NAME = "helicopters.txt";
 
     public static void showMenu(){
         String menu = """
@@ -83,6 +80,7 @@ public class AirplaneManagement {
     }
 
     public static void main(String[] args) {
+        loadData();
         start();
     }
 
@@ -146,26 +144,60 @@ public class AirplaneManagement {
     }
 
     private static void saveData(){
-        File airportFile = new File(OUTPUT_DATA_PATH + AIRPORT_FILE_NAME);
-        File fixedwingFile = new File(OUTPUT_DATA_PATH + FIXEDWING_FILE_NAME);
-        File helicopterFile = new File(OUTPUT_DATA_PATH + HELICOPTER_FILE_NAME);
+        File airportFile = new File(DATA_PATH + AIRPORT_FILE_NAME);
+        File fixedwingFile = new File(DATA_PATH + FIXEDWING_FILE_NAME);
+        File helicopterFile = new File(DATA_PATH + HELICOPTER_FILE_NAME);
         try(BufferedWriter airportWriter = new BufferedWriter(new FileWriter(airportFile));
             BufferedWriter fixedWingsWriter = new BufferedWriter(new FileWriter(fixedwingFile));
             BufferedWriter helicopterWriter = new BufferedWriter(new FileWriter(helicopterFile))){
             List<Airport> airports = airportService.findAll();
             for(Airport airport : airports){
                 airportWriter.write(airport.toString());
+                airportWriter.newLine();
             }
             List<FixedWing> fixedWings = fixedwingService.findAll();
             for(FixedWing fixedWing : fixedWings){
                 fixedWingsWriter.write(fixedWing.toString());
+                fixedWingsWriter.newLine();
             }
             List<Helicopter> helicopters = helicopterService.findAll();
             for(Helicopter helicopter : helicopters){
                 helicopterWriter.write(helicopter.toString());
+                helicopterWriter.newLine();
             }
         }catch (IOException e){
             System.out.println("Error store data because of: " + e.getMessage());
+        }
+    }
+
+    private static void loadData(){
+        File airportFile = new File(DATA_PATH + AIRPORT_FILE_NAME);
+        File fixedwingFile = new File(DATA_PATH + FIXEDWING_FILE_NAME);
+        File helicopterFile = new File(DATA_PATH + HELICOPTER_FILE_NAME);
+        if(airportFile.exists()){
+            try(BufferedReader airportReader = new BufferedReader(new FileReader(airportFile))){
+                airportReader.lines().forEach(airportService::parse);
+            }catch (IOException e){
+                System.out.println("Error load airport data because of: " + e.getMessage());
+            }
+        }
+        if(fixedwingFile.exists()){
+            try(BufferedReader fixedWingReader = new BufferedReader(new FileReader(fixedwingFile))){
+                fixedWingReader.lines().forEach(line -> {
+                    fixedwingService.parse(line, airportService);
+                });
+            }catch (IOException e){
+                System.out.println("Error load fixed wing data because of: " + e.getMessage());
+            }
+        }
+        if(helicopterFile.exists()){
+            try(BufferedReader helicopterReader = new BufferedReader(new FileReader(helicopterFile))){
+                helicopterReader.lines().forEach(line -> {
+                    helicopterService.parse(line, airportService);
+                });
+            }catch (IOException e){
+                System.out.println("Error load helicopter data because of: " + e.getMessage());
+            }
         }
     }
 
