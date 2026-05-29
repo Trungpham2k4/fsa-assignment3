@@ -289,13 +289,19 @@ public class AirplaneManagement {
         delimiter();
         System.out.println("Display list of all fixed wings in airport");
         delimiter();
-        List<FixedWing> fixedWings = fixedwingService.findAll();
-        for(FixedWing fixedWing : fixedWings){
-            System.out.print("Airplane: " + fixedWing + " ");
-            for(Airport airport : airportService.findAll()){
-                if(airport.getFixedWingIds().contains(fixedWing.getId())){
-                    System.out.println("Parked in airport: " + airport.getId() + "-" + airport.getName());
-                }
+        String airportId = inputValidId("Enter ID of airport that you want to show fixed wings: ","AP");
+        if(!Validator.isExistId(airportId, airportService.findAllId())){
+            System.out.println("Airport not found");
+            return;
+        }
+        Airport airport = airportService.findById(airportId);
+        System.out.println("Airport ID: " + airportId);
+        System.out.println("Airport Name: " + airport.getName());
+        System.out.println("List of fixed wings");
+        List<String> fixedWings = fixedwingService.findAllIds();
+        for(String fixedWingId : fixedWings){
+            if(airport.getFixedWingIds().contains(fixedWingId)){
+                System.out.println(fixedwingService.findById(fixedWingId));
             }
         }
     }
@@ -304,13 +310,19 @@ public class AirplaneManagement {
         delimiter();
         System.out.println("Display list of all helicopters in airport");
         delimiter();
-        List<Helicopter> helicopters = helicopterService.findAll();
-        for(Helicopter helicopter : helicopters){
-            System.out.print("Airplane: " + helicopter + " ");
-            for(Airport airport : airportService.findAll()){
-                if(airport.getHelicopterIds().contains(helicopter.getId())){
-                    System.out.println("Parked in airport: " + airport.getId() + "-" + airport.getName());
-                }
+        String airportId = inputValidId("Enter ID of airport that you want to show helicopters: ","AP");
+        if(!Validator.isExistId(airportId, airportService.findAllId())){
+            System.out.println("Airport not found");
+            return;
+        }
+        Airport airport = airportService.findById(airportId);
+        System.out.println("Airport ID: " + airportId);
+        System.out.println("Airport Name: " + airport.getName());
+        System.out.println("List of helicopters");
+        List<String> helicopters = helicopterService.findAllIds();
+        for(String helicopterId : helicopters){
+            if(airport.getHelicopterIds().contains(helicopterId)){
+                System.out.println(helicopterService.findById(helicopterId));
             }
         }
     }
@@ -425,7 +437,12 @@ public class AirplaneManagement {
             System.out.println("No fixed wings found");
         }else{
             for(FixedWing fixedWing : fixedWings){
-                System.out.println(fixedWing);
+                System.out.print("Airplane: " + fixedWing + " ");
+                for(Airport airport : airportService.findAll()){
+                    if(airport.getFixedWingIds().contains(fixedWing.getId())){
+                        System.out.println("| Parked in airport: " + airport.getId() + " - " + airport.getName());
+                    }
+                }
             }
         }
     }
@@ -538,7 +555,12 @@ public class AirplaneManagement {
             System.out.println("No helicopters found");
         }else{
             for(Helicopter helicopter : helicopters){
-                System.out.println(helicopter);
+                System.out.print("Airplane: " + helicopter + " ");
+                for(Airport airport : airportService.findAll()){
+                    if(airport.getHelicopterIds().contains(helicopter.getId())){
+                        System.out.println("| Parked in airport: " + airport.getId() + " - " + airport.getName());
+                    }
+                }
             }
         }
     }
